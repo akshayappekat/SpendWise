@@ -9,6 +9,6 @@ echo "Verifying Flutter Installation..."
 flutter doctor -v
 
 echo "Building Flutter Web Release Bundle..."
-flutter build web --release
+flutter build web --release --base-href /
 
 echo "Build Completed Successfully!"
