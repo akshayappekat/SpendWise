@@ -1,0 +1,30 @@
+name: spendwise
+description: SpendWise - Personal Expense Tracker Flutter Mobile Application.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.1.1
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  intl: ^0.18.1
+  fl_chart: ^0.65.0
+  shared_preferences: ^2.2.2
+  google_fonts: ^6.1.0
+  flutter_animate: ^4.3.0
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpendWise – Personal Expense Tracker & Financial Manager</title>
+  <meta name="description" content="SpendWise is a personal finance management application to track income, monitor budgets, scan receipts, automate recurring bills, manage savings goals, and generate AI insights.">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="app" class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+        <div class="brand-text">
+          <h1>SpendWise</h1>
+          <span>Finance Tracker</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard">
+          <i class="fa-solid fa-grip-vertical"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="transactions">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Transactions</span>
+        </button>
+        <button class="nav-item" data-tab="analytics">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Analytics</span>
+        </button>
+        <button class="nav-item" data-tab="budget">
+          <i class="fa-solid fa-piggy-bank"></i>
+          <span>Budget</span>
+        </button>
+        <button class="nav-item" data-tab="goals">
+          <i class="fa-solid fa-bullseye"></i>
+          <span>Goals</span>
+        </button>
+        <button class="nav-item" data-tab="recurring">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>Recurring</span>
+        </button>
+        <button class="nav-item" data-tab="scanner">
+          <i class="fa-solid fa-camera"></i>
+          <span>Receipt Scanner</span>
+        </button>
+        <button class="nav-item" data-tab="ai-insights">
+          <i class="fa-solid fa-brain"></i>
+          <span>AI Insights</span>
+        </button>
+        <button class="nav-item" data-tab="profile">
+          <i class="fa-solid fa-user-gear"></i>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle-wrapper">
+          <span>Dark Theme</span>
+          <label class="switch">
+            <input type="checkbox" id="themeToggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="user-greeting">
+          <h2>Hello, Akshay 👋</h2>
+          <p>Financial overview for <span id="currentMonthYear">September 2026</span></p>
+        </div>
+        <div class="header-actions">
+          <div class="notification-wrapper">
+            <button class="icon-btn" id="notifBtn" title="Notifications">
+              <i class="fa-solid fa-bell"></i>
+              <span class="notif-badge" id="notifBadge">2</span>
+            </button>
+            <div class="notif-dropdown" id="notifDropdown">
+              <div class="notif-header">
+                <h4>Notifications</h4>
+                <button class="link-btn" id="clearNotifsBtn">Clear All</button>
+              </div>
+              <div class="notif-list" id="notifList">
+                <!-- Notifications dynamically populated -->
+              </div>
+            </div>
+          </div>
+          <div class="currency-selector">
+            <i class="fa-solid fa-coins"></i>
+            <select id="currencySelect">
+              <option value="₹">₹ INR</option>
+              <option value="$">$ USD</option>
+              <option value="€">€ EUR</option>
+              <option value="£">£ GBP</option>
+              <option value="AED">AED</option>
+              <option value="SGD">SGD</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="openAddModalBtn">
+            <i class="fa-solid fa-plus"></i> Add Transaction
+          </button>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD -->
+      <section id="tab-dashboard" class="tab-content active">
+        <!-- Balance Overview Card -->
+        <div class="balance-card">
+          <div class="balance-card-inner">
+            <div class="balance-main">
+              <span class="balance-label">Total Balance</span>
+              <h3 id="totalBalance">₹11,500</h3>
+            </div>
+            <div class="balance-stats">
+              <div class="stat-item income">
+                <div class="stat-icon"><i class="fa-solid fa-arrow-down"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Total Income</span>
+                  <span class="stat-value" id="totalIncome">₹30,000</span>
+                </div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item expense">
+                <div class="stat-icon"><i class="fa-solid fa-arrow-up"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Total Expenses</span>
+                  <span class="stat-value" id="totalExpense">₹18,500</span>
+                </div>
+              </div>
+              <div class="stat-divider"></div>
+              <div class="stat-item savings">
+                <div class="stat-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                <div class="stat-info">
+                  <span class="stat-label">Savings Rate</span>
+                  <span class="stat-value" id="savingsRateVal">38.3%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Layout for Dashboard Widgets -->
+        <div class="dashboard-grid">
+          <!-- Monthly Budget Progress Widget -->
+          <div class="glass-card budget-widget">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-line"></i> Monthly Budget Utilization</h3>
+              <span class="badge" id="budgetUsageBadge">92.5% Used</span>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="budgetProgressBar" style="width: 92.5%;"></div>
+            </div>
+            <div class="budget-details">
+              <div>
+                <span class="detail-label">Spent</span>
+                <span class="detail-val" id="dashSpent">₹18,500</span>
+              </div>
+              <div>
+                <span class="detail-label">Limit</span>
+                <span class="detail-val" id="dashLimit">₹20,000</span>
+              </div>
+              <div>
+                <span class="detail-label">Remaining</span>
+                <span class="detail-val highlight" id="dashRemaining">₹1,500</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Analytics Preview Widget -->
+          <div class="glass-card chart-preview-widget">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-pie"></i> Category Distribution</h3>
+              <button class="link-btn switch-tab" data-target="analytics">View Details</button>
+            </div>
+            <div class="chart-container-sm">
+              <canvas id="dashPieChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="glass-card recent-tx-widget">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</h3>
+            <button class="link-btn switch-tab" data-target="transactions">See All History</button>
+          </div>
+          <div class="tx-list" id="dashTxList">
+            <!-- Dynamic Transaction Tiles -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: TRANSACTIONS -->
+      <section id="tab-transactions" class="tab-content">
+        <div class="glass-card filter-toolbar">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search description, category, or payment method...">
+          </div>
+          <div class="filter-controls">
+            <select id="filterType">
+              <option value="All">All Types</option>
+              <option value="income">Income</option>
+              <option value="expense">Expense</option>
+            </select>
+            <select id="filterCategory">
+              <option value="All">All Categories</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Education">Education</option>
+              <option value="Bills">Bills</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Health">Health</option>
+              <option value="Travel">Travel</option>
+              <option value="Salary">Salary</option>
+              <option value="Other">Other</option>
+            </select>
+            <select id="filterPayment">
+              <option value="All">All Payment Methods</option>
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Other">Other</option>
+            </select>
+            <select id="sortBy">
+              <option value="newest">Sort: Newest First</option>
+              <option value="oldest">Sort: Oldest First</option>
+              <option value="amount-high">Amount: High to Low</option>
+              <option value="amount-low">Amount: Low to High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <h3>Transaction History</h3>
+            <span class="tx-count" id="txCountBadge">0 Transactions</span>
+          </div>
+          <div class="tx-list full-list" id="fullTxList">
+            <!-- Dynamic Transaction Items -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: ANALYTICS -->
+      <section id="tab-analytics" class="tab-content">
+        <div class="glass-card filter-toolbar">
+          <div class="time-range-filters">
+            <button class="btn btn-secondary active-filter" data-range="30">30 Days</button>
+            <button class="btn btn-secondary" data-range="90">3 Months</button>
+            <button class="btn btn-secondary" data-range="180">6 Months</button>
+            <button class="btn btn-secondary" data-range="365">1 Year</button>
+            <button class="btn btn-secondary" data-range="all">All Time</button>
+          </div>
+        </div>
+
+        <div class="analytics-grid">
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-pie"></i> Category Distribution</h3>
+            </div>
+            <div class="chart-container-lg">
+              <canvas id="analyticsPieChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-credit-card"></i> Payment Method Analytics</h3>
+            </div>
+            <div class="chart-container-lg">
+              <canvas id="paymentChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-grid margin-top">
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-chart-column"></i> Income vs Expense Trend</h3>
+            </div>
+            <div class="chart-container-lg">
+              <canvas id="analyticsBarChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <div class="card-header">
+              <h3><i class="fa-solid fa-arrow-trend-up"></i> Savings Trend</h3>
+            </div>
+            <div class="chart-container-lg">
+              <canvas id="savingsTrendChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card margin-top">
+          <div class="card-header">
+            <h3>Category Breakdown Summary</h3>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Entries</th>
+                  <th>Share (%)</th>
+                  <th>Total Expenditure</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTableBody">
+                <!-- Dynamic Category Rows -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: BUDGET MANAGEMENT -->
+      <section id="tab-budget" class="tab-content">
+        <div class="glass-card budget-setting-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-sliders"></i> Monthly Overall Budget</h3>
+          </div>
+          <form id="budgetForm" class="budget-form">
+            <div class="form-group">
+              <label for="budgetInput">Monthly Overall Limit (<span class="currency-symbol">₹</span>)</label>
+              <input type="number" id="budgetInput" value="20000" min="1" step="100" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Budget</button>
+          </form>
+        </div>
+
+        <div class="budget-metrics-grid">
+          <div class="glass-card metric-card">
+            <div class="metric-icon purple"><i class="fa-solid fa-wallet"></i></div>
+            <div class="metric-data">
+              <span>Allocated Budget</span>
+              <h4 id="budgetAllocated">₹20,000</h4>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-icon red"><i class="fa-solid fa-receipt"></i></div>
+            <div class="metric-data">
+              <span>Total Spent</span>
+              <h4 id="budgetTotalSpent">₹18,500</h4>
+            </div>
+          </div>
+
+          <div class="glass-card metric-card">
+            <div class="metric-icon green"><i class="fa-solid fa-piggy-bank"></i></div>
+            <div class="metric-data">
+              <span>Remaining Budget</span>
+              <h4 id="budgetTotalRemaining">₹1,500</h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card margin-top">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-list-ol"></i> Category-Specific Budgets</h3>
+            <button class="btn btn-secondary" id="openCatBudgetModalBtn"><i class="fa-solid fa-plus"></i> Set Category Budget</button>
+          </div>
+          <div class="category-budgets-grid" id="categoryBudgetsContainer">
+            <!-- Dynamic Category Budget Cards -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: FINANCIAL GOALS -->
+      <section id="tab-goals" class="tab-content">
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-bullseye"></i> Financial Savings Goals</h3>
+            <button class="btn btn-primary" id="openGoalModalBtn"><i class="fa-solid fa-plus"></i> Create Goal</button>
+          </div>
+          <p class="subtitle-text">Track your progress towards major purchases, emergency funds, and vacations.</p>
+        </div>
+
+        <div class="goals-grid" id="goalsContainer">
+          <!-- Dynamic Goal Cards -->
+        </div>
+      </section>
+
+      <!-- TAB 6: RECURRING TRANSACTIONS -->
+      <section id="tab-recurring" class="tab-content">
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-rotate-right"></i> Automated Recurring Bills</h3>
+            <button class="btn btn-primary" id="openRecurringModalBtn"><i class="fa-solid fa-plus"></i> Add Recurring Bill</button>
+          </div>
+          <p class="subtitle-text">Manage subscriptions, rent, utility bills, and automated salary deposits.</p>
+        </div>
+
+        <div class="glass-card margin-top">
+          <div class="tx-list" id="recurringList">
+            <!-- Dynamic Recurring Items -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 7: RECEIPT SCANNER -->
+      <section id="tab-scanner" class="tab-content">
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-camera"></i> Smart Receipt OCR Scanner</h3>
+          </div>
+          <p class="subtitle-text">Upload or photograph a shopping receipt to extract merchant, date, amount, and category.</p>
+          
+          <div class="scanner-dropzone" id="dropzone">
+            <i class="fa-solid fa-cloud-arrow-up scanner-icon"></i>
+            <h4>Drag & Drop Receipt Image or Click to Upload</h4>
+            <p>Supports JPG, PNG, WEBP files</p>
+            <input type="file" id="receiptFileInput" accept="image/*" style="display:none;">
+          </div>
+        </div>
+
+        <div class="glass-card margin-top hidden" id="ocrResultCard">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-file-invoice"></i> Extracted Receipt Data</h3>
+            <span class="badge badge-accent">Review & Confirm</span>
+          </div>
+          <form id="ocrConfirmForm" class="modal-form">
+            <div class="form-group">
+              <label for="ocrMerchant">Extracted Merchant / Description</label>
+              <input type="text" id="ocrMerchant" required>
+            </div>
+            <div class="form-group">
+              <label for="ocrAmount">Extracted Amount (<span class="currency-symbol">₹</span>)</label>
+              <input type="number" id="ocrAmount" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label for="ocrCategory">Suggested Category</label>
+              <select id="ocrCategory">
+                <option value="Food">Food</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Transport">Transport</option>
+                <option value="Bills">Bills</option>
+                <option value="Health">Health</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="ocrDate">Date</label>
+              <input type="date" id="ocrDate" required>
+            </div>
+            <div class="modal-actions">
+              <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save to Transactions</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- TAB 8: AI FINANCIAL INSIGHTS -->
+      <section id="tab-ai-insights" class="tab-content">
+        <div class="glass-card ai-header-card">
+          <div class="ai-avatar">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div>
+            <h3>SpendWise AI Assistant</h3>
+            <p>Factual spending analysis derived strictly from your recorded transactions.</p>
+          </div>
+        </div>
+
+        <div class="ai-insights-grid" id="aiInsightsContainer">
+          <!-- Dynamic AI Insights -->
+        </div>
+      </section>
+
+      <!-- TAB 9: SETTINGS -->
+      <section id="tab-profile" class="tab-content">
+        <div class="glass-card profile-card">
+          <div class="profile-avatar">
+            <i class="fa-solid fa-user-ninja"></i>
+          </div>
+          <div class="profile-info">
+            <h3 id="profileName">Akshay</h3>
+            <p id="profileEmail">akshay@example.com</p>
+            <span class="badge badge-accent">Authenticated Account</span>
+          </div>
+        </div>
+
+        <div class="glass-card settings-card margin-top">
+          <h3><i class="fa-solid fa-gears"></i> Application Settings</h3>
+          <div class="settings-list">
+            <div class="setting-item">
+              <div>
+                <h4>Default Currency</h4>
+                <p>Change preferred currency symbol</p>
+              </div>
+              <select id="settingCurrencySelect">
+                <option value="₹">₹ INR</option>
+                <option value="$">$ USD</option>
+                <option value="€">€ EUR</option>
+                <option value="£">£ GBP</option>
+                <option value="AED">AED</option>
+                <option value="SGD">SGD</option>
+              </select>
+            </div>
+            
+            <div class="setting-item">
+              <div>
+                <h4>Cloud Backup & Sync</h4>
+                <p>Synchronize data with Firebase Cloud Firestore</p>
+              </div>
+              <button class="btn btn-secondary" id="firebaseSyncBtn"><i class="fa-solid fa-cloud"></i> Connect Firebase</button>
+            </div>
+
+            <div class="setting-item">
+              <div>
+                <h4>Export Transactions</h4>
+                <p>Download financial records in multiple formats</p>
+              </div>
+              <div class="export-btn-group">
+                <button class="btn btn-secondary" id="exportJsonBtn"><i class="fa-solid fa-file-code"></i> JSON</button>
+                <button class="btn btn-secondary" id="exportCsvBtn"><i class="fa-solid fa-file-csv"></i> CSV</button>
+                <button class="btn btn-secondary" id="exportPdfBtn"><i class="fa-solid fa-file-pdf"></i> Report</button>
+              </div>
+            </div>
+
+            <div class="setting-item">
+              <div>
+                <h4>Reset All Data</h4>
+                <p>Restore default sample entries</p>
+              </div>
+              <button class="btn btn-danger" id="resetDataBtn"><i class="fa-solid fa-rotate"></i> Reset Data</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modal Dialogs -->
+
+    <!-- Add/Edit Transaction Modal -->
+    <div class="modal-overlay" id="txModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3 id="modalTitle">Add Transaction</h3>
+          <button class="close-btn" id="closeModalBtn">&times;</button>
+        </div>
+        <form id="txForm" class="modal-form">
+          <input type="hidden" id="txId">
+          <div class="type-toggle">
+            <label class="type-option income-opt">
+              <input type="radio" name="txType" value="income">
+              <span><i class="fa-solid fa-plus-circle"></i> Income</span>
+            </label>
+            <label class="type-option expense-opt">
+              <input type="radio" name="txType" value="expense" checked>
+              <span><i class="fa-solid fa-minus-circle"></i> Expense</span>
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label for="txAmount">Amount (<span class="currency-symbol">₹</span>)</label>
+            <input type="number" id="txAmount" placeholder="e.g. 500" step="0.01" min="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label for="txCategory">Category</label>
+            <select id="txCategory" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="txPayment">Payment Method</label>
+            <select id="txPayment">
+              <option value="Cash">Cash</option>
+              <option value="UPI">UPI</option>
+              <option value="Credit Card">Credit Card</option>
+              <option value="Debit Card">Debit Card</option>
+              <option value="Bank Transfer">Bank Transfer</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="txDate">Date</label>
+            <input type="date" id="txDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="txDescription">Description (Optional)</label>
+            <input type="text" id="txDescription" placeholder="e.g. Lunch at cafe">
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Transaction</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Create Goal Modal -->
+    <div class="modal-overlay" id="goalModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Create Financial Savings Goal</h3>
+          <button class="close-btn" id="closeGoalModalBtn">&times;</button>
+        </div>
+        <form id="goalForm" class="modal-form">
+          <div class="form-group">
+            <label for="goalName">Goal Name</label>
+            <input type="text" id="goalName" placeholder="e.g. New Laptop" required>
+          </div>
+          <div class="form-group">
+            <label for="goalTarget">Target Amount (<span class="currency-symbol">₹</span>)</label>
+            <input type="number" id="goalTarget" placeholder="e.g. 80000" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="goalCurrent">Current Savings (<span class="currency-symbol">₹</span>)</label>
+            <input type="number" id="goalCurrent" placeholder="e.g. 35000" min="0" value="0">
+          </div>
+          <div class="form-group">
+            <label for="goalTargetDate">Target Date</label>
+            <input type="date" id="goalTargetDate" required>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Save Goal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Funds Modal -->
+    <div class="modal-overlay" id="depositModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Add Funds to Goal</h3>
+          <button class="close-btn" id="closeDepositModalBtn">&times;</button>
+        </div>
+        <form id="depositForm" class="modal-form">
+          <input type="hidden" id="depositGoalId">
+          <div class="form-group">
+            <label for="depositAmount">Deposit Amount (<span class="currency-symbol">₹</span>)</label>
+            <input type="number" id="depositAmount" placeholder="e.g. 5000" min="1" required>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Add Funds</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Recurring Bill Modal -->
+    <div class="modal-overlay" id="recurringModal">
+      <div class="modal-container">
+        <div class="modal-header">
+          <h3>Add Recurring Transaction</h3>
+          <button class="close-btn" id="closeRecurringModalBtn">&times;</button>
+        </div>
+        <form id="recurringForm" class="modal-form">
+          <div class="form-group">
+            <label for="recTitle">Title / Service</label>
+            <input type="text" id="recTitle" placeholder="e.g. Netflix Subscription" required>
+          </div>
+          <div class="form-group">
+            <label for="recAmount">Amount (<span class="currency-symbol">₹</span>)</label>
+            <input type="number" id="recAmount" placeholder="e.g. 649" min="1" required>
+          </div>
+          <div class="form-group">
+            <label for="recFrequency">Frequency</label>
+            <select id="recFrequency">
+              <option value="Daily">Daily</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly" selected>Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="recCategory">Category</label>
+            <select id="recCategory">
+              <option value="Bills">Bills</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Food">Food</option>
+              <option value="Transport">Transport</option>
+              <option value="Salary">Salary</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="recNextDate">Next Occurrence Date</label>
+            <input type="date" id="recNextDate" required>
+          </div>
+          <div class="modal-actions">
+            <button type="submit" class="btn btn-primary">Save Recurring Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

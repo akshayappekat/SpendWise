@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "outputDirectory": "build/web",
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
