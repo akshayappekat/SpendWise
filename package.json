@@ -1,11 +1,12 @@
 {
-  "name": "spendwise-backend",
+  "name": "spendwise",
   "version": "1.0.0",
-  "description": "SpendWise Express Backend API for Render",
+  "description": "SpendWise - Personal Expense Tracker Flutter Web Application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build": "bash vercel-build.sh"
   },
   "dependencies": {
     "cors": "^2.8.5",
