@@ -1,15 +1,17 @@
 {
   "name": "spendwise",
   "version": "1.0.0",
-  "description": "SpendWise - Personal Expense Tracker Flutter Web Application",
-  "main": "server.js",
+  "description": "SpendWise - Personal Expense Tracker",
+  "main": "index.html",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "build": "bash vercel-build.sh"
+    "dev": "vite --port 3000",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^6.3.5"
   }
 }
